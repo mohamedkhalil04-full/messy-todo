@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>ToDo</title>
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"> -->
+  <link rel="stylesheet" href="css/all.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="title">To Do List</h1>
+    <input type="text" id="taskInput" placeholder="Enter new task ....">
+    <button onclick="addTask()">Add Task</button>
+    <ul id="taskList"></ul> <!-- الليست هنا -->
+  </div>
+
+
+  <script>
+    let tasks = [];  
+
+    const renderTasks=()=> { // to render every thing
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = '';
+      tasks.forEach((task, index) => { 
+        const taskDiv = document.createElement('div'); 
+        taskDiv.id = 'content'; 
+        const li = document.createElement('li');  
+        li.textContent = task.value;
+        li.className = task.completed ? 'differentStyle' : ''; 
+        li.onclick = () => toggleTask(index); 
+        const deleteIcon = document.createElement('span');
+        deleteIcon.innerHTML = '<i class="fa-solid fa-trash"></i>'; 
+        deleteIcon.onclick = () => deleteTask(index); 
+        taskDiv.appendChild(li); 
+        taskDiv.appendChild(deleteIcon); 
+        taskList.appendChild(taskDiv); 
+      });
+    }
+
+    const addTask=()=> {  // to add task
+      const input = document.getElementById('taskInput'); 
+      const value = input.value.trim(); 
+      if (value !== '') { 
+        tasks.push({ value, completed: false }); 
+        input.value = ''; 
+        renderTasks(); 
+      }
+    }
+     // عشان زرار الEnter
+    const addByEnter=(event)=> {
+      if (event.key === 'Enter') {
+        addTask();
+      }
+    }
+    document.getElementById('taskInput').addEventListener('keydown', addByEnter);
+    renderTasks();
+
+    const toggleTask=(index)=> { // to toggle task status
+      tasks[index].completed = !tasks[index].completed;
+      renderTasks();
+    }
+
+    const deleteTask=(index)=> { // to Delete task
+      tasks.splice(index, 1);
+      renderTasks();
+    }
+  </script>
+</body>
+
+</html>
